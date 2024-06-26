@@ -3,7 +3,7 @@ import axios from "axios";
 const ACCESS_KEY = "Pzd5WHZvc1LGW1YiJXACZG630o_NjJimOba4WjnMaTw";
 axios.defaults.baseURL = "https://api.unsplash.com";
 
-interface UnsplashImage {
+export interface UnsplashImage {
   id: string;
   urls: {
     regular: string;
@@ -12,7 +12,7 @@ interface UnsplashImage {
   likes: number;
 }
 
-interface UnsplashResponse {
+export interface UnsplashResponse {
   results: UnsplashImage[];
   total: number;
 }
