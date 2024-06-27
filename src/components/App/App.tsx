@@ -2,19 +2,11 @@ import React, { useEffect, useState } from "react";
 import SearchBar from "../SearchBar/SearchBar";
 import LoadMoreBtn from '../LoadMoreBtn/LoadMoreBtn';
 import ErrorMessage from "../ErrorMessage/ErrorMessage";
-import fetchImages, { UnsplashImage, UnsplashResponse } from "../fetchImg";
+import fetchImages, { UnsplashImage, UnsplashResponse } from "../fetchImages";
 import ImageModal from "../ImageModal/ImageModal";
 import ImageGallery from "../ImageGallery/ImageGallery";
 import Loader from '../Loader/Loader';
-
-interface Image {
-  id: string;
-  urls: {
-    regular: string;
-  };
-  alt_description: string;
-  likes: number;
-}
+import style from "./App.module.css"; 
 
 const App: React.FC = () => {
   const [error, setError] = useState<boolean | null>(null);
@@ -54,9 +46,11 @@ const App: React.FC = () => {
 
     try {
       const data: UnsplashResponse = await fetchImages(searchTerm, page);
+      console.log("Fetched data:", data);
       setImages((prevImages) => (page === 1 ? data.results : [...prevImages, ...data.results]));
       setTotalPages(Math.ceil(data.total / 10));
     } catch (error) {
+      console.error("Error fetching images:", error);
       setError(true);
     } finally {
       setLoading(false);
@@ -68,7 +62,7 @@ const App: React.FC = () => {
   }, [searchTerm, page]);
 
   return (
-    <>
+    <div className={style.app}>
       <SearchBar onSearch={handleSearch} />
       {images.length > 0 && (
         <ImageGallery images={images} isOpen={handleOpenModal} />
@@ -84,7 +78,7 @@ const App: React.FC = () => {
         isClose={handleCloseModal}
         imageUrl={selectedImage}
       />
-    </>
+    </div>
   );
 };
 

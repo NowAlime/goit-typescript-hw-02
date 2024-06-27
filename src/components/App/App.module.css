@@ -1,4 +1,8 @@
-.imageGallery {
+app {
+    text-align: center;
+  }
+  
+  .imageGallery {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
@@ -6,4 +10,9 @@
   
   .imageItem {
     margin: 10px;
+  }
+  
+  .loader {
+    margin: auto;
+    width: 100px;
   }

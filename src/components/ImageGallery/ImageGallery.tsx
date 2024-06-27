@@ -1,27 +1,22 @@
-import React from 'react';
-
-interface Image {
-  id: string;
-  url: string;
-  alt: string;
-}
+import React from "react";
+import { UnsplashImage } from "../fetchImages";
+import style from "./ImageGallery.module.css"; 
 
 interface ImageGalleryProps {
-  images: Image[];
-  onImageClick: (id: string) => void;
+  images: UnsplashImage[];
+  isOpen: (url: string) => void;
 }
 
-const ImageGallery: React.FC<ImageGalleryProps> = ({ images, onImageClick }) => (
-  <div className="image-gallery">
-    {images.map(image => (
-      <img
-        key={image.id}
-        src={image.url}
-        alt={image.alt}
-        onClick={() => onImageClick(image.id)}
-      />
-    ))}
-  </div>
-);
+const ImageGallery: React.FC<ImageGalleryProps> = ({ images, isOpen }) => {
+  return (
+    <div className={style.imageGallery}>
+      {images.map((image) => (
+        <div key={image.id} className={style.imageItem} onClick={() => isOpen(image.urls.regular)}>
+          <img src={image.urls.regular} alt={image.alt_description} />
+        </div>
+      ))}
+    </div>
+  );
+};
 
 export default ImageGallery;

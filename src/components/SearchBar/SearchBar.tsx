@@ -1,5 +1,5 @@
 import React from 'react';
-import { Formik, Field, Form, ErrorMessage } from 'formik';
+import { Formik, Field, Form, ErrorMessage, FormikHelpers } from 'formik';
 import { useId } from 'react-id-generator';
 import { IoSearchOutline } from 'react-icons/io5';
 import toast, { Toaster } from 'react-hot-toast';
@@ -9,10 +9,14 @@ interface SearchBarProps {
   onSearch: (text: string) => void;
 }
 
+interface FormValues {
+  text: string;
+}
+
 const SearchBar: React.FC<SearchBarProps> = ({ onSearch }) => {
   const [searchId] = useId();
 
-  const handleSubmit = (values: { text: string }, action: any) => {
+  const handleSubmit = (values: FormValues, actions: FormikHelpers<FormValues>) => {
     const { text } = values;
     if (!text) {
       toast.error(
@@ -25,7 +29,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ onSearch }) => {
       onSearch(text);
     }
 
-    action.resetForm();
+    actions.resetForm();
   };
 
   return (
