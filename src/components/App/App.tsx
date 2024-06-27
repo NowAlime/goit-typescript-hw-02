@@ -1,12 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import SearchBar from "../SearchBar/SearchBar";
-import LoadMoreBtn from '../LoadMoreBtn/LoadMoreBtn';
+import LoadMoreBtn from "../LoadMoreBtn/LoadMoreBtn";
 import ErrorMessage from "../ErrorMessage/ErrorMessage";
 import fetchImages, { UnsplashImage, UnsplashResponse } from "../fetchImages";
 import ImageModal from "../ImageModal/ImageModal";
 import ImageGallery from "../ImageGallery/ImageGallery";
 import Loader from '../Loader/Loader';
-import style from "./App.module.css"; 
 
 const App: React.FC = () => {
   const [error, setError] = useState<boolean | null>(null);
@@ -38,7 +37,7 @@ const App: React.FC = () => {
     setPage((prevPage) => prevPage + 1);
   };
 
-  const fetchImagesData = async () => {
+  const fetchImagesData = useCallback(async () => {
     if (!searchTerm) return;
 
     setLoading(true);
@@ -46,23 +45,21 @@ const App: React.FC = () => {
 
     try {
       const data: UnsplashResponse = await fetchImages(searchTerm, page);
-      console.log("Fetched data:", data);
       setImages((prevImages) => (page === 1 ? data.results : [...prevImages, ...data.results]));
       setTotalPages(Math.ceil(data.total / 10));
     } catch (error) {
-      console.error("Error fetching images:", error);
       setError(true);
     } finally {
       setLoading(false);
     }
-  };
+  }, [searchTerm, page]);
 
   useEffect(() => {
     fetchImagesData();
-  }, [searchTerm, page]);
+  }, [fetchImagesData]);
 
   return (
-    <div className={style.app}>
+    <>
       <SearchBar onSearch={handleSearch} />
       {images.length > 0 && (
         <ImageGallery images={images} isOpen={handleOpenModal} />
@@ -78,7 +75,7 @@ const App: React.FC = () => {
         isClose={handleCloseModal}
         imageUrl={selectedImage}
       />
-    </div>
+    </>
   );
 };
 
